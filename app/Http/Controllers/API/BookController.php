@@ -31,7 +31,7 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
-        $cached = Cache::remember('book:'.$book->id, 60 * 60, function () use ($book): array {
+        $cached = Cache::remember('book:' . $book->id, 60 * 60, function () use ($book): array {
             return (new BookResource($book))->resolve();
         });
 
@@ -48,6 +48,7 @@ class BookController extends Controller
         ]);
 
         $book->update($validated);
+        Cache::forget('book:' . $book->id);
 
         return new BookResource($book);
     }
@@ -55,6 +56,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $book->delete();
+        Cache::forget('book:' . $book->id);
 
         return response()->noContent();
     }
