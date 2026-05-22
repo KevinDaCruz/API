@@ -24,6 +24,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function usesProfessionalEmail(): bool
+    {
+        return !preg_match('/@(gmail|yahoo|hotmail|live|outlook)\./', $this->email ?? '');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
