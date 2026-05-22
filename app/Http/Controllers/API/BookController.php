@@ -17,7 +17,7 @@ class BookController extends Controller
         tags: ['Books'],
         parameters: [
             new OA\Parameter(name: 'page', in: 'query', required: false, schema: new OA\Schema(type: 'integer')),
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
         ],
         responses: [
             new OA\Response(
@@ -29,6 +29,17 @@ class BookController extends Controller
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/Book')),
                         new OA\Property(property: 'links', type: 'object'),
                         new OA\Property(property: 'meta', type: 'object')
+                    ],
+                    example: [
+                        'data' => [[
+                            'title' => '1984',
+                            'author' => 'GEORGE ORWELL',
+                            'summary' => 'Roman dystopique...',
+                            'isbn' => '9780451524935',
+                            '_links' => ['self' => ['href' => '/api/v1/books/1']]
+                        ]],
+                        'links' => ['first' => '/api/v1/books?page=1', 'last' => '/api/v1/books?page=5'],
+                        'meta' => ['current_page' => 1, 'per_page' => 2, 'total' => 10]
                     ]
                 )
             )
@@ -45,7 +56,7 @@ class BookController extends Controller
         tags: ['Books'],
         security: [['bearerAuth' => []]],
         parameters: [
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
             new OA\Parameter(name: 'Authorization', in: 'header', required: true, schema: new OA\Schema(type: 'string')),
         ],
         requestBody: new OA\RequestBody(
@@ -53,8 +64,8 @@ class BookController extends Controller
             content: new OA\JsonContent(ref: '#/components/schemas/BookInput')
         ),
         responses: [
-            new OA\Response(response: 201, description: 'Created', content: new OA\JsonContent(ref: '#/components/schemas/Book')),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 201, description: 'Created', content: new OA\JsonContent(ref: '#/components/schemas/Book', example: ['title' => 'Nouveau livre', 'author' => 'Nouvel auteur', 'summary' => 'Un resume assez long pour la validation.', 'isbn' => '9781234567890'])),
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Unauthorized'])),
             new OA\Response(response: 422, description: 'Validation error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationError'))
         ]
     )]
@@ -80,11 +91,11 @@ class BookController extends Controller
         tags: ['Books'],
         parameters: [
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
         ],
         responses: [
-            new OA\Response(response: 200, description: 'Success', content: new OA\JsonContent(ref: '#/components/schemas/Book')),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'))
+            new OA\Response(response: 200, description: 'Success', content: new OA\JsonContent(ref: '#/components/schemas/Book', example: ['title' => '1984', 'author' => 'GEORGE ORWELL', 'summary' => 'Roman dystopique...', 'isbn' => '9780451524935'])),
+            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Book not found']))
         ]
     )]
     public function show(Book $book)
@@ -103,7 +114,7 @@ class BookController extends Controller
         security: [['bearerAuth' => []]],
         parameters: [
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
             new OA\Parameter(name: 'Authorization', in: 'header', required: true, schema: new OA\Schema(type: 'string')),
         ],
         requestBody: new OA\RequestBody(
@@ -112,8 +123,8 @@ class BookController extends Controller
         ),
         responses: [
             new OA\Response(response: 200, description: 'Success', content: new OA\JsonContent(ref: '#/components/schemas/Book')),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Unauthorized'])),
+            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Book not found'])),
             new OA\Response(response: 422, description: 'Validation error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationError'))
         ]
     )]
@@ -124,7 +135,7 @@ class BookController extends Controller
         security: [['bearerAuth' => []]],
         parameters: [
             new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'integer')),
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
             new OA\Parameter(name: 'Authorization', in: 'header', required: true, schema: new OA\Schema(type: 'string')),
         ],
         requestBody: new OA\RequestBody(
@@ -133,9 +144,9 @@ class BookController extends Controller
         ),
         responses: [
             new OA\Response(response: 200, description: 'Success', content: new OA\JsonContent(ref: '#/components/schemas/Book')),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
-            new OA\Response(response: 422, description: 'Validation error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationError'))
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Unauthorized'])),
+            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Book not found'])),
+            new OA\Response(response: 422, description: 'Validation error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationError', example: ['message' => 'The given data was invalid.', 'errors' => ['title' => ['The title must be at least 3 characters.']]]))
         ]
     )]
     public function update(Request $request, Book $book)
@@ -165,8 +176,8 @@ class BookController extends Controller
         ],
         responses: [
             new OA\Response(response: 204, description: 'No content'),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
-            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'))
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Unauthorized'])),
+            new OA\Response(response: 404, description: 'Not found', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Book not found']))
         ]
     )]
     public function destroy(Book $book)

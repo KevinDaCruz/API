@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use OpenApi\Attributes as OA;
 
 #[OA\Info(title: 'Books API', version: '1.0.0', description: 'API for books and auth')]
-#[OA\Server(url: 'http://localhost/api/v1')]
+#[OA\Server(url: 'http://localhost:8000/api/v1')]
 #[OA\SecurityScheme(
     securityScheme: 'bearerAuth',
     type: 'http',
@@ -49,7 +49,8 @@ use OpenApi\Attributes as OA;
     schema: 'ErrorResponse',
     type: 'object',
     properties: [
-        new OA\Property(property: 'message', type: 'string', example: 'Invalid credentials')
+        new OA\Property(property: 'message', type: 'string', example: 'An error occurred'),
+        new OA\Property(property: 'errors', type: 'object', nullable: true)
     ]
 )]
 #[OA\Schema(
@@ -60,7 +61,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(
             property: 'errors',
             type: 'object',
-            example: ['email' => ['The email field is required.']]
+            example: ['email' => ['The email field is required.'], 'title' => ['The title must be at least 3 characters.']]
         )
     ]
 )]

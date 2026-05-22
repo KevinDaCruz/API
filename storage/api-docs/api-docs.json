@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost/api/v1"
+            "url": "http://localhost:8000/api/v1"
         }
     ],
     "paths": {
@@ -30,9 +30,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     }
                 ],
@@ -57,6 +61,30 @@
                                         }
                                     },
                                     "type": "object"
+                                },
+                                "example": {
+                                    "data": [
+                                        {
+                                            "title": "1984",
+                                            "author": "GEORGE ORWELL",
+                                            "summary": "Roman dystopique...",
+                                            "isbn": "9780451524935",
+                                            "_links": {
+                                                "self": {
+                                                    "href": "/api/v1/books/1"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "links": {
+                                        "first": "/api/v1/books?page=1",
+                                        "last": "/api/v1/books?page=5"
+                                    },
+                                    "meta": {
+                                        "current_page": 1,
+                                        "per_page": 2,
+                                        "total": 10
+                                    }
                                 }
                             }
                         }
@@ -73,9 +101,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     },
                     {
@@ -104,6 +136,12 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Book"
+                                },
+                                "example": {
+                                    "title": "Nouveau livre",
+                                    "author": "Nouvel auteur",
+                                    "summary": "Un resume assez long pour la validation.",
+                                    "isbn": "9781234567890"
                                 }
                             }
                         }
@@ -114,6 +152,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Unauthorized"
                                 }
                             }
                         }
@@ -155,9 +196,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     }
                 ],
@@ -168,6 +213,12 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Book"
+                                },
+                                "example": {
+                                    "title": "1984",
+                                    "author": "GEORGE ORWELL",
+                                    "summary": "Roman dystopique...",
+                                    "isbn": "9780451524935"
                                 }
                             }
                         }
@@ -178,6 +229,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Book not found"
                                 }
                             }
                         }
@@ -202,9 +256,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     },
                     {
@@ -243,6 +301,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Unauthorized"
                                 }
                             }
                         }
@@ -253,6 +314,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Book not found"
                                 }
                             }
                         }
@@ -316,6 +380,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Unauthorized"
                                 }
                             }
                         }
@@ -326,6 +393,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Book not found"
                                 }
                             }
                         }
@@ -355,9 +425,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     },
                     {
@@ -396,6 +470,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Unauthorized"
                                 }
                             }
                         }
@@ -406,6 +483,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Book not found"
                                 }
                             }
                         }
@@ -416,6 +496,14 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ValidationError"
+                                },
+                                "example": {
+                                    "message": "The given data was invalid.",
+                                    "errors": {
+                                        "title": [
+                                            "The title must be at least 3 characters."
+                                        ]
+                                    }
                                 }
                             }
                         }
@@ -439,9 +527,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     }
                 ],
@@ -481,6 +573,14 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/AuthResponse"
+                                },
+                                "example": {
+                                    "token": "ya29.exampletoken",
+                                    "user": {
+                                        "id": 1,
+                                        "name": "Kevin",
+                                        "email": "kevin@example.com"
+                                    }
                                 }
                             }
                         }
@@ -509,9 +609,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     }
                 ],
@@ -546,6 +650,14 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/AuthResponse"
+                                },
+                                "example": {
+                                    "token": "ya29.exampletoken",
+                                    "user": {
+                                        "id": 1,
+                                        "name": "Kevin",
+                                        "email": "kevin@example.com"
+                                    }
                                 }
                             }
                         }
@@ -556,6 +668,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Invalid credentials"
                                 }
                             }
                         }
@@ -576,6 +691,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Too many login attempts. Please try again in 60 seconds."
                                 }
                             }
                         }
@@ -594,9 +712,13 @@
                     {
                         "name": "Accept",
                         "in": "header",
-                        "required": false,
+                        "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "example": "application/json",
+                            "enum": [
+                                "application/json"
+                            ]
                         }
                     },
                     {
@@ -618,6 +740,9 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ErrorResponse"
+                                },
+                                "example": {
+                                    "message": "Unauthorized"
                                 }
                             }
                         }
@@ -705,7 +830,11 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "Invalid credentials"
+                        "example": "An error occurred"
+                    },
+                    "errors": {
+                        "type": "object",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -721,6 +850,9 @@
                         "example": {
                             "email": [
                                 "The email field is required."
+                            ],
+                            "title": [
+                                "The title must be at least 3 characters."
                             ]
                         }
                     }

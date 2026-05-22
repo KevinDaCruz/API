@@ -15,7 +15,7 @@ class UserController extends Controller
         summary: 'Register a user',
         tags: ['Auth'],
         parameters: [
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
@@ -30,7 +30,7 @@ class UserController extends Controller
             )
         ),
         responses: [
-            new OA\Response(response: 201, description: 'Created', content: new OA\JsonContent(ref: '#/components/schemas/AuthResponse')),
+            new OA\Response(response: 201, description: 'Created', content: new OA\JsonContent(ref: '#/components/schemas/AuthResponse', example: ['token' => 'ya29.exampletoken', 'user' => ['id' => 1, 'name' => 'Kevin', 'email' => 'kevin@example.com']])),
             new OA\Response(response: 422, description: 'Validation error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationError'))
         ]
     )]
@@ -61,7 +61,7 @@ class UserController extends Controller
         summary: 'Login and get a token',
         tags: ['Auth'],
         parameters: [
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
         ],
         requestBody: new OA\RequestBody(
             required: true,
@@ -75,10 +75,10 @@ class UserController extends Controller
             )
         ),
         responses: [
-            new OA\Response(response: 200, description: 'Success', content: new OA\JsonContent(ref: '#/components/schemas/AuthResponse')),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')),
+            new OA\Response(response: 200, description: 'Success', content: new OA\JsonContent(ref: '#/components/schemas/AuthResponse', example: ['token' => 'ya29.exampletoken', 'user' => ['id' => 1, 'name' => 'Kevin', 'email' => 'kevin@example.com']])),
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Invalid credentials'])),
             new OA\Response(response: 422, description: 'Validation error', content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')),
-            new OA\Response(response: 429, description: 'Too many requests', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'))
+            new OA\Response(response: 429, description: 'Too many requests', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Too many login attempts. Please try again in 60 seconds.']))
         ]
     )]
     public function login(Request $request)
@@ -110,12 +110,12 @@ class UserController extends Controller
         tags: ['Auth'],
         security: [['bearerAuth' => []]],
         parameters: [
-            new OA\Parameter(name: 'Accept', in: 'header', required: false, schema: new OA\Schema(type: 'string')),
+            new OA\Parameter(name: 'Accept', in: 'header', required: true, schema: new OA\Schema(type: 'string', enum: ['application/json'], example: 'application/json')),
             new OA\Parameter(name: 'Authorization', in: 'header', required: true, schema: new OA\Schema(type: 'string')),
         ],
         responses: [
             new OA\Response(response: 204, description: 'No content'),
-            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'))
+            new OA\Response(response: 401, description: 'Unauthorized', content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse', example: ['message' => 'Unauthorized']))
         ]
     )]
     public function logout(Request $request)
